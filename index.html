@@ -14,11 +14,11 @@
       <model-viewer
         min-camera-orbit="auto 0deg auto"
         max-camera-orbit="auto 87deg auto"
-        exposure="0.5"
+        exposure="2"
         interaction-prompt="none"
         id="sphere"
         restrict-gltf-model="y"
-        src="models/coc.glb"
+        src="models/coc2.glb"
         ar
         ar-modes="webxr scene-viewer quick-look"
         camera-controls
@@ -29,6 +29,7 @@
         environment-image=""
         skybox-image=""
         tone-mapping="commerce"
+        default-roughness="0.5"
       >
         <div class="controls" style="color: wheat">
           <div>
@@ -50,7 +51,7 @@
               min="0"
               max="1"
               step="0.01"
-              value="1"
+              value="0.96"
             />
           </div>
           <div>
@@ -92,12 +93,14 @@
       const modelViewerParameters = document.querySelector(
         "model-viewer#sphere"
       );
+
+      // temp.pbrMetallicRoughness.setRoughnessFactor(0.96);
       modelViewerParameters.addEventListener("load", (ev) => {
         let material = modelViewerParameters.model.materials[0];
 
         let metalnessDisplay = document.querySelector("#metalness-value");
         let roughnessDisplay = document.querySelector("#roughness-value");
-
+        material.pbrMetallicRoughness.setRoughnessFactor(0.96);
         metalnessDisplay.textContent =
           material.pbrMetallicRoughness.metallicFactor;
         roughnessDisplay.textContent =
