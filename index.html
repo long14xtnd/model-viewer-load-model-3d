@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <link rel="stylesheet" href="responsive.css" />
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   </head>
@@ -18,7 +17,7 @@
         interaction-prompt="none"
         id="sphere"
         restrict-gltf-model="y"
-        src="models/coc2.glb"
+        src="models/coc.glb"
         ar
         ar-modes="webxr scene-viewer quick-look"
         camera-controls
@@ -51,7 +50,7 @@
               min="0"
               max="1"
               step="0.01"
-              value="0.96"
+              value="1"
             />
           </div>
           <div>
@@ -62,7 +61,7 @@
               min="0"
               max="10"
               step="0.01"
-              value="2"
+              value="1"
               oninput="changeExposure(this.value)"
             />
           </div>
@@ -94,21 +93,33 @@
         "model-viewer#sphere"
       );
 
-      // temp.pbrMetallicRoughness.setRoughnessFactor(0.96);
       modelViewerParameters.addEventListener("load", (ev) => {
         let material = modelViewerParameters.model.materials[0];
 
         let metalnessDisplay = document.querySelector("#metalness-value");
         let roughnessDisplay = document.querySelector("#roughness-value");
+        let exposureDisplay = document.querySelector("#exposure-value");
+
+        // Set default metalness and roughness to 1
+        material.pbrMetallicRoughness.setMetallicFactor(1);
         material.pbrMetallicRoughness.setRoughnessFactor(0.96);
+
+        // Update displays
         metalnessDisplay.textContent =
           material.pbrMetallicRoughness.metallicFactor;
         roughnessDisplay.textContent =
           material.pbrMetallicRoughness.roughnessFactor;
+        exposureDisplay.textContent =
+          modelViewerParameters.getAttribute("exposure");
 
-        // Defaults to gold
-        // material.pbrMetallicRoughness.setBaseColorFactor([0.7294, 0.5333, 0.0392]);
+        document.querySelector("#metalness").value =
+          material.pbrMetallicRoughness.metallicFactor;
+        document.querySelector("#roughness").value =
+          material.pbrMetallicRoughness.roughnessFactor;
+        document.querySelector("#exposure").value =
+          modelViewerParameters.getAttribute("exposure");
 
+        // Add event listeners for metalness, roughness, and exposure inputs
         document
           .querySelector("#metalness")
           .addEventListener("input", (event) => {
@@ -123,6 +134,13 @@
               event.target.value
             );
             roughnessDisplay.textContent = event.target.value;
+          });
+
+        document
+          .querySelector("#exposure")
+          .addEventListener("input", (event) => {
+            modelViewerParameters.setAttribute("exposure", event.target.value);
+            exposureDisplay.textContent = event.target.value;
           });
       });
 

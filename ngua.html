@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Load Model 3D</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="responsive.css" />
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  </head>
+  <body>
+    <div class="grid-container">
+      <model-viewer
+        min-camera-orbit="auto 0deg auto"
+        max-camera-orbit="auto 87deg auto"
+        exposure="1"
+        interaction-prompt="none"
+        id="sphere"
+        restrict-gltf-model="y"
+        src="models/ngua.glb"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        poster="https://modelviewer.dev/shared-assets/models/poster.webp"
+        shadow-intensity="0"
+        shadow-softness="0"
+        auto-rotate
+        environment-image=""
+        skybox-image=""
+        tone-mapping="commerce"
+        default-roughness="0.5"
+      >
+        <div class="controls" style="color: wheat">
+          <div>
+            <p>Kim loại: <span id="metalness-value"></span></p>
+            <input
+              id="metalness"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <div>
+            <p>Độ nhám: <span id="roughness-value"></span></p>
+            <input
+              id="roughness"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <div>
+            <p>Phơi sáng: <span id="exposure-value"></span></p>
+            <input
+              id="exposure"
+              type="range"
+              min="0"
+              max="10"
+              step="0.01"
+              value="1"
+              oninput="changeExposure(this.value)"
+            />
+          </div>
+          <div style="padding-top: 10px">
+            <input type="checkbox" id="skybox-checkbox" /> Bật/tắt môi trường
+          </div>
+        </div>
+        <button>
+          <img
+            src="https://static-00.iconduck.com/assets.00/settings-icon-2048x2046-cw28eevx.png"
+            alt=""
+            width="30px"
+            height="30px"
+          />
+        </button>
+      </model-viewer>
+    </div>
+
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
+    ></script>
+    <script>
+      $("button").on("click", function () {
+        $(".controls").toggle("slow");
+      });
+
+      const modelViewerParameters = document.querySelector(
+        "model-viewer#sphere"
+      );
+
+      modelViewerParameters.addEventListener("load", (ev) => {
+        let material = modelViewerParameters.model.materials[0];
+
+        let metalnessDisplay = document.querySelector("#metalness-value");
+        let roughnessDisplay = document.querySelector("#roughness-value");
+        let exposureDisplay = document.querySelector("#exposure-value");
+
+        // Set default metalness and roughness to 1
+        material.pbrMetallicRoughness.setMetallicFactor(1);
+        material.pbrMetallicRoughness.setRoughnessFactor(1);
+
+        // Update displays
+        metalnessDisplay.textContent =
+          material.pbrMetallicRoughness.metallicFactor;
+        roughnessDisplay.textContent =
+          material.pbrMetallicRoughness.roughnessFactor;
+        exposureDisplay.textContent =
+          modelViewerParameters.getAttribute("exposure");
+
+        document.querySelector("#metalness").value =
+          material.pbrMetallicRoughness.metallicFactor;
+        document.querySelector("#roughness").value =
+          material.pbrMetallicRoughness.roughnessFactor;
+        document.querySelector("#exposure").value =
+          modelViewerParameters.getAttribute("exposure");
+
+        // Add event listeners for metalness, roughness, and exposure inputs
+        document
+          .querySelector("#metalness")
+          .addEventListener("input", (event) => {
+            material.pbrMetallicRoughness.setMetallicFactor(event.target.value);
+            metalnessDisplay.textContent = event.target.value;
+          });
+
+        document
+          .querySelector("#roughness")
+          .addEventListener("input", (event) => {
+            material.pbrMetallicRoughness.setRoughnessFactor(
+              event.target.value
+            );
+            roughnessDisplay.textContent = event.target.value;
+          });
+
+        document
+          .querySelector("#exposure")
+          .addEventListener("input", (event) => {
+            modelViewerParameters.setAttribute("exposure", event.target.value);
+            exposureDisplay.textContent = event.target.value;
+          });
+      });
+
+      function changeExposure(value) {
+        document.getElementById("sphere").setAttribute("exposure", value);
+        document.getElementById("exposure-value").innerText = value;
+        document.getElementById("exposure-value").textContent = value;
+      }
+
+      const sphere = document.getElementById("sphere");
+      const skyboxCheckbox = document.getElementById("skybox-checkbox");
+
+      skyboxCheckbox.addEventListener("change", function () {
+        if (this.checked) {
+          // Bật chế độ sử dụng môi trường làm skybox
+          sphere.setAttribute(
+            "skybox-image",
+            "https://modelviewer.dev/shared-assets/environments/pillars_1k.hdr"
+          );
+        } else {
+          // Tắt chế độ sử dụng môi trường làm skybox
+          sphere.removeAttribute("skybox-image");
+        }
+      });
+    </script>
+  </body>
+</html>
