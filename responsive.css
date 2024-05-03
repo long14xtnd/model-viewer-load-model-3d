@@ -17,8 +17,8 @@ model-viewer {
   grid-gap: 0px;
 }
 
-.controls{
-    display: none;
+.controls {
+  display: none;
 }
 
 .a {
@@ -39,3 +39,4 @@ model-viewer {
     grid-row: 1 / 5;
   }
 }
+

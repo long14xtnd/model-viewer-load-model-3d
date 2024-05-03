@@ -7,13 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="responsive.css" />
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="main.js"></script>
   </head>
   <body>
     <div class="grid-container">
       <model-viewer
         min-camera-orbit="auto 0deg auto"
         max-camera-orbit="auto 87deg auto"
-        exposure="3.2" 
+        max-field-of-view="40deg"
+        min-field-of-view="30deg"
+        exposure="3.2"
         interaction-prompt="none"
         id="sphere"
         restrict-gltf-model="y"
@@ -69,14 +72,16 @@
             <input type="checkbox" id="skybox-checkbox" /> Bật/tắt môi trường
           </div>
         </div>
-        <button>
-          <img
-            src="https://static-00.iconduck.com/assets.00/settings-icon-2048x2046-cw28eevx.png"
-            alt=""
-            width="30px"
-            height="30px"
-          />
-        </button>
+        <div id="settings">
+          <img src="./icons/settings.png" alt="" width="40px" height="40px" />
+        </div>
+        <!-- Nút để kích hoạt fullscreen -->
+        <div
+          id="fullscreen-button"
+          style="position: fixed; bottom: 17px; right: 68px; z-index: 9999"
+        >
+          <img width="35px" height="35px" src="./icons/fullscreen.png" alt="" />
+        </div>
       </model-viewer>
     </div>
 
@@ -85,7 +90,7 @@
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
     ></script>
     <script>
-      $("button").on("click", function () {
+      $("#settings").on("click", function () {
         $(".controls").toggle("slow");
       });
 
