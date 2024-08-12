@@ -24,8 +24,6 @@
         ar
         ar-modes="webxr scene-viewer quick-look"
         camera-controls
-        poster="https://modelviewer.dev/shared-assets/models/poster.webp"
-        shadow-intensity="0"
         shadow-softness="0"
         auto-rotate
         environment-image=""
@@ -161,10 +159,7 @@
       skyboxCheckbox.addEventListener("change", function () {
         if (this.checked) {
           // Bật chế độ sử dụng môi trường làm skybox
-          sphere.setAttribute(
-            "skybox-image",
-            "https://modelviewer.dev/shared-assets/environments/pillars_1k.hdr"
-          );
+          sphere.setAttribute("skybox-image", "/pillars_1k.hdr");
         } else {
           // Tắt chế độ sử dụng môi trường làm skybox
           sphere.removeAttribute("skybox-image");
