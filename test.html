@@ -34,6 +34,10 @@
       >
         <div class="controls" style="color: wheat">
           <div>
+            Variant:
+            <select id="variant"></select>
+          </div>
+          <div>
             <p>Kim loại: <span id="metalness-value"></span></p>
             <input
               id="metalness"
@@ -165,6 +169,30 @@
           // Tắt chế độ sử dụng môi trường làm skybox
           sphere.removeAttribute("skybox-image");
         }
+      });
+    </script>
+    <script>
+      const modelViewerVariants = document.querySelector("model-viewer#sphere");
+      const select = document.querySelector("#variant");
+
+      modelViewerVariants.addEventListener("load", () => {
+        const names = modelViewerVariants.availableVariants;
+        for (const name of names) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        }
+        // Adds a default option.
+        const option = document.createElement("option");
+        option.value = "default";
+        option.textContent = "Default";
+        select.appendChild(option);
+      });
+
+      select.addEventListener("input", (event) => {
+        modelViewerVariants.variantName =
+          event.target.value === "default" ? null : event.target.value;
       });
     </script>
   </body>
